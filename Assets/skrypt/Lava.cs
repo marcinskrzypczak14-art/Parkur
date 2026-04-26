@@ -14,11 +14,35 @@ public class Lava : MonoBehaviour
         startScale = transform.localScale;
         startPosition = transform.position;
     }
-
-    // Update is called once per frame
+    public void StartLava()
+    {
+        isRising = true;
+    }
+    public void StopLava()
+    {
+        isRising = false;
+        transform.localScale = startScale;
+        transform.position = startPosition;
+    }
     void Update()
     {
-        
+        if (isRising)
+        {
+            // Aktualizacja skali
+            transform.localScale += new Vector3(0f, growthSpeed * Time.deltaTime, 0f);
+            // Przesuwanie obiektu o pó³ wartoœci zmiany wysokoœci tak,
+            // aby dó³ pozosta³ w jednej pozycji
+            transform.position += new Vector3(0f, growthSpeed * Time.deltaTime / 2f, 0f);
+        }
     }
-   
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            var respawn = collision.gameObject.GetComponent<PlayerRespawn>();
+            respawn.Respawn();
+            StopLava();
+        }
+    }
 }
+

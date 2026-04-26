@@ -1,22 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Compilation;
 using UnityEngine;
+
 
 public class PlayerRespawn : MonoBehaviour
 {
-    Vector3 currentCheckpoint;
+    private Vector3 currentCheckpoint;
     [SerializeField] float fallPoint = -20f;
-    void Start()
+    public Lava lava;
+    private void Start()
     {
         currentCheckpoint = transform.position;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (transform.position.y < fallPoint)
+        if (transform.position.y <= fallPoint)
         {
-            transform.position = currentCheckpoint; 
+            Respawn();
         }
     }
 
@@ -26,5 +28,10 @@ public class PlayerRespawn : MonoBehaviour
         {
             currentCheckpoint = other.transform.position;
         }
+    }
+    public void Respawn()
+    {
+        transform.position = currentCheckpoint;
+        lava.StopLava();
     }
 }
